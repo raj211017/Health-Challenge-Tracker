@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Addwork</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet"  href="styles.css" >
+  <script src="script.js"></script>
+</head>
+<body>
+  
+  <div id="title">
+     <h1>Add Workout </h1>
+  </div>
+  <div id="addwork">
+    <form onsubmit="addwork()" id="uform">
+     <input type="text" placeholder="User Name" id="name" required>
+      <select id="worktype">
+     <option>Workout type</option>
+     <option value="Cycling">Cycling</option>
+      <option value="Chest">Chest</option>
+      <option value="Leg">Leg</option>
+     <option value="Biscep">Biscep</option>
+     <option value="Back">Back</option>
+     <option value="Yoga">Yoga</option>
+     <option value="Running">Running</option>
+     <option value="Swimming">Swimming</option>
+     </select>
+      <input type="number" placeholder="Minutes" id="time" required>
+      <br><br>
+      <button id="btn" >Add Work</button> 
+    </form>
+  </div>
+
+    <div id="searcharea">
+     <form>
+       <input type="text" placeholder="search by name" id="searchinput" onkeyup="search()">    
+       <div id="workinputarea">
+       <div id="text">Filter by Workout Type</div>
+       <select id="worksearch" oninput="searchworktype()">
+         <option>ALL</option>
+         <option value="Cycling">Cycling</option>
+         <option value="Chest">Chest</option>
+         <option value="Leg">Leg</option>
+         <option value="Biscep">Biscep</option>
+         <option value="Back">Back</option>
+         <option value="Yoga">Yoga</option>
+         <option value="Running">Running</option>
+         <option value="Swimming">Swimming</option>
+       </select>
+      </div>
+     </form>
+    </div>
+
+    <div id="list">
+     <table >
+        <tr>
+       <th>Name</th> <th>Workouts</th> <th>Total Workout Minutes</th>
+       </tr>
+      </table>
+      <table id="tablelist">
+       <tr>
+       <td>John Doe</td><td>Running, Cycling</td><td>75</td>
+       </tr>
+       <tr>
+       <td>Jane Smith</td><td>Swimming, Running</td><td>80</td>
+       </tr>
+       <tr>
+       <td>Mike Johnson</td><td>Yoga, Cycling</td><td>90</td>
+       </tr>
+      
+     </table>
+     
+    </div><br>
+   <div id="pageno">
+    <button>← Previous</button>
+    <button>1</button><button>2</button><button>3</button>
+    <button>Next →</button>
+    <div id="perpage">Items per page: <select id="rownumber" oninput="printrow()" >
+      <option value="10">10</option>
+      <option value="15">15</option>
+      <option value="20">20</option>
+    </select>
+    </div>
+   </div>
+   <br>
+   <app-root> </app-root>
+   <script>
+  
+    var table=document.getElementById("tablelist");
+    table.innerHTML=localStorage.getItem("data");
+    localStorage.setItem("data",table.innerHTML);
+
+   function addwork(){
+   var name=document.getElementById("name").value;
+   var workout=document.getElementById("worktype").value;
+   var time=document.getElementById("time").value;
+   var tr= document.createElement("tr");
+   table.appendChild(tr);
+   var td=document.createElement("td");
+   td.innerHTML=name;
+   tr.appendChild(td);
+   var td=document.createElement("td");
+   td.innerHTML=workout;
+   tr.appendChild(td);
+   var td=document.createElement("td");
+   td.innerHTML=time;
+   tr.appendChild(td);
+   alert("Data added successfully ✅")
+   localStorage.setItem("data",table.innerHTML);
+   table.innerHTML=localStorage.getItem("data");
+   }
+   
+   function search()
+  {
+     var input=document.getElementById("searchinput").value.toUpperCase();
+     var tr=document.getElementsByTagName("tr");
+     for(var i=1;i<tr.length;i++)
+     {
+       var td=tr[i].getElementsByTagName("td")[0];
+       if(td)
+       {
+         var textvalue=td.textContent || td.innerHtml;
+         var ndata=textvalue.toUpperCase();   
+         if(ndata.indexOf(input) > -1)
+         {
+         tr[i].style.display="";
+         }
+         else{
+          tr[i].style.display="none";
+         }
+        }
+      }
+    }
+
+    function searchworktype()
+  {
+     var input=document.getElementById("worksearch").value;
+     var tr=document.getElementsByTagName("tr");
+     for(var i=1;i<tr.length;i++)
+     {
+       var td=tr[i].getElementsByTagName("td")[1];
+       if(td)
+       {
+         var textvalue=td.textContent || td.innerHtml;
+           
+         if(textvalue.indexOf(input) > -1)
+         {
+         tr[i].style.display="";
+         }
+         else{
+          tr[i].style.display="none";
+         }
+        }
+      }
+    }
+    
+    printrow();
+    function printrow(){
+      var nrow=document.getElementById("rownumber").value;
+      var inrow=Number(nrow);
+      var tr=document.getElementsByTagName("tr");
+      
+      var hiderow= 1+inrow;
+      table.innerHTML=localStorage.getItem("data");
+     
+    for(i=hiderow;i<tr.length;i++)
+    {
+      tr[i].style.display="none";
+    }
+   
+   
+   
+   
+    }
+   
+   </script>
+</body>
+</html>
